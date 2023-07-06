@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <title>Registration Form</title>
+    <style>
+        .form-message {
+            color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Get a call</h2>
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <small>Book a slot and our representative will can you within 1hr of selected time</small>
+                <hr>
+                <form id="registrationForm" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="text" id="phone" class="form-control" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time to call:</label>
+                        <div class="container">
+                            <div class="row">
+                                    <div class="col-6"><input type="date" id="date" class="form-control" name="date" required></div>
+                                    <div class="col-6"><input type="time" id="time" class="form-control" name="time" required></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Get a call" class="btn btn-primary btn-block">
+                    </div>
+                    <div class="form-message" id="formMessage"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="first.js"></script>
+</body>
+</html>
