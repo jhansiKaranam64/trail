@@ -84,4 +84,8 @@ var h1=document.querySelector('header h1');
 newDiv.style.fontSize ='30px';
 head.insertBefore(newDiv,h1);
 
+// add before item 1
+var item1 = document.querySelector("#items li:first-child");
+item1.parentNode.insertBefore(newDiv, item1);
 console.log(newDiv);
+
