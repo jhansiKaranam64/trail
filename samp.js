@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*const items = document.getElementsByClassName('list-group-item');
 items[1].style.backgroundColor='green';
 for(var i=0;i<items.length;i++){
@@ -98,10 +99,13 @@ console.log(newDiv);
 
 */
 
+=======
+>>>>>>> 6c0f396 (update event)
 var form = document.getElementById('addForm');
 var itemList = document.getElementById('items');
 
 
+<<<<<<< HEAD
 // form submit event
 form.addEventListener('submit',addItem);
 // Delete Event
@@ -151,3 +155,56 @@ function removeItem(e){
 
 
 
+=======
+// Form submit event
+form.addEventListener('submit', addItem);
+// Delete event
+itemList.addEventListener('click', removeItem);
+
+
+// Add item
+function addItem(e){
+  e.preventDefault();
+
+  // Get input value
+  var newItem = document.getElementById('item').value;
+
+  // Create new li element
+  var li = document.createElement('li');
+  // Add class
+  li.className = 'list-group-item';
+  // Add text node with input value
+  li.appendChild(document.createTextNode(newItem));
+
+  // Create del button element
+  var deleteBtn = document.createElement('button');
+
+  // Add classes to del button
+  deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
+
+  // Append text node
+  deleteBtn.appendChild(document.createTextNode('X'));
+
+  // edit button
+  var editBtn = document.createElement('button');
+  editBtn.className = 'btn btn-primary btn-sm float-right edit';
+  editBtn.appendChild(document.createTextNode('edit'));
+  
+  // Append button to li
+  li.appendChild(deleteBtn);
+  li.appendChild(editBtn);
+  // Append li to list
+  itemList.appendChild(li);
+}
+
+// Remove item
+function removeItem(e){
+  if(e.target.classList.contains('delete')){
+    if(confirm('Are You Sure?')){
+      var li = e.target.parentElement;
+      itemList.removeChild(li);
+    }
+  }
+}
+
+>>>>>>> 6c0f396 (update event)
