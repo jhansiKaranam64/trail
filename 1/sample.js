@@ -1,5 +1,5 @@
 //manuplating the DOM
-const ul=document.querySelector('.items');
+/*const ul=document.querySelector('.items');
 ul.firstElementChild.textContent='Hello';
 ul.children[1].innerText='Hii';
 ul.lastElementChild.innerHTML='<h1>What</h1';
@@ -37,7 +37,7 @@ nameInput.addEventListener('input',e=>{
     document.querySelector('.container').append(namesInput.value);
 });
 
-/*const emailInput=document.querySelector('#email');
+const emailInput=document.querySelector('#email');
 emailInput.addEventListener('input',e=>{
     document.querySelector('.container').append(emailInput.value);
 });*/
@@ -65,7 +65,28 @@ function onSubmit(e){
         const li=document.createElement('li');
         li.appendChild(document.createTextNode(`${nameInput.value}:${emailInput.value}`));
         userList.appendChild(li);
+        var storedData = localStorage.getItem('itemDetails');
 
+        // localStorage
+
+        /*if(storedData){
+            storedData +='\n'+nameInput.value+": "+emailInput.value;
+        }else{
+            storedData =nameInput.value+": "+emailInput.value;
+        }
+        localStorage.setItem('itemDetails',storedData);*/
+
+        // create user details object
+        var nam = nameInput.value;
+        var ema = emailInput.value;
+        var Details = {
+            name: nam,
+            email: ema
+        };
+        // Convert user details object to a string
+        var userDetails = JSON.stringify(Details);
+        localStorage.setItem('UserDetail',userDetails);
+        
         //clear fields
         nameInput.value='';
         emailInput.value='';
