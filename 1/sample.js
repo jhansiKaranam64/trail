@@ -1,4 +1,4 @@
-//manuplating the DOM
+/*//manuplating the DOM
 const ul=document.querySelector('.items');
 ul.firstElementChild.textContent='Hello';
 ul.children[1].innerText='Hii';
@@ -37,7 +37,7 @@ nameInput.addEventListener('input',e=>{
     document.querySelector('.container').append(namesInput.value);
 });
 
-/*const emailInput=document.querySelector('#email');
+const emailInput=document.querySelector('#email');
 emailInput.addEventListener('input',e=>{
     document.querySelector('.container').append(emailInput.value);
 });*/
@@ -65,6 +65,15 @@ function onSubmit(e){
         const li=document.createElement('li');
         li.appendChild(document.createTextNode(`${nameInput.value}:${emailInput.value}`));
         userList.appendChild(li);
+
+        // storing name and id  in localStorage
+        var storedInput = localStorage.getItem('ItemDetails');
+        if(storedInput){
+            storedInput +="\n "+nameInput.value+": "+emailInput.value;
+        }else{
+            storedInput =nameInput.value+": "+emailInput.value;
+        }
+        localStorage.setItem('ItemDetails',storedInput);
 
         //clear fields
         nameInput.value='';
