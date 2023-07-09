@@ -65,10 +65,10 @@ function onSubmit(e){
         const li=document.createElement('li');
         li.appendChild(document.createTextNode(`${nameInput.value}:${emailInput.value}`));
         userList.appendChild(li);
-        var storedData = localStorage.getItem('itemDetails');
+        
 
         // localStorage
-
+        // var storedData = localStorage.getItem('itemDetails');
         /*if(storedData){
             storedData +='\n'+nameInput.value+": "+emailInput.value;
         }else{
@@ -77,15 +77,17 @@ function onSubmit(e){
         localStorage.setItem('itemDetails',storedData);*/
 
         // create user details object
-        var nam = nameInput.value;
-        var ema = emailInput.value;
-        var Details = {
-            name: nam,
-            email: ema
+        var storedData = localStorage.getItem('userDetails');
+        var userDetails = storedData ? JSON.parse(storedData) : [];
+       
+        var newUser = {
+            name: nameInput.value,
+            email: emailInput.value
         };
-        // Convert user details object to a string
-        var userDetails = JSON.stringify(Details);
-        localStorage.setItem('UserDetail',userDetails);
+        userDetails.push(newUser);
+        localStorage.setItem('userDetails',JSON.stringify(userDetails));
+       
+        
         
         //clear fields
         nameInput.value='';
