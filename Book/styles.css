@@ -33,5 +33,6 @@ ul{
     list-style: circle;
 }
 .float-right{
-    float:right !important
+    float:right !important;
+    padding: 1%;
 }

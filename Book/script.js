@@ -5,6 +5,7 @@ const msg=document.querySelector('.msg');
 
 form.addEventListener('submit',addItem);
 itemList.addEventListener('click',removeItem);
+itemList.addEventListener('click',editItem);
 
 // Add details
 function addItem(e){
@@ -23,13 +24,24 @@ function addItem(e){
         setTimeout(()=>msg.remove(),3000);
     }else{
         var li =document.createElement('li');
-        var button = document.createElement('button');
-        button.className ="btn btn-danger btn-sm float-right delete";
-        button.appendChild(document.createTextNode('Delete'));
+
+        var deleteBtn = document.createElement('button');
+        deleteBtn.className ="btn btn-danger btn-sm float-right delete";
+        deleteBtn.appendChild(document.createTextNode('Delete'));
         li.className = "list-group-item";
-        li.appendChild(document.createTextNode(newName.value+": "+newEmail.value+": "+newPhone.value));
-        li.appendChild(button);
+        li.appendChild(document.createTextNode(newName.value+": "));
+        li.appendChild(document.createTextNode(newEmail.value+": "));
+        li.appendChild(document.createTextNode(newPhone.value));
+        
+        var editBtn = document.createElement('button');
+        editBtn.classList = "btn btn-primary btn-sm float-right edit";
+        editBtn.appendChild(document.createTextNode('Edit'));
+
+        
+        li.appendChild(deleteBtn);
+        li.appendChild(editBtn); 
         itemList.appendChild(li);
+       
 
         var storedData = localStorage.getItem(newEmail.value);
         //var userDetails = storedData ? JSON.parse(storedData):[];
@@ -59,4 +71,30 @@ function removeItem(e){
             itemList.removeChild(li);
         }
     }
+}
+
+// editItem function
+function editItem(e){
+    e.preventDefault();
+    if(e.target.classList.contains('edit')){
+        var newName = document.getElementById('name');
+        var newEmail = document.getElementById('email');
+        var newPhone = document.getElementById('Phone');
+        
+        var li = e.target.parentElement;
+        // getting values
+        var nameElement = li.firstChild;
+        var emailElement = nameElement.nextSibling;
+        var phoneElement = emailElement.nextSibling;
+        // to get values in input placeholders
+        newName.value = nameElement.textContent.split(':')[0].trim();
+        newEmail.value = emailElement.textContent.split(':')[0].trim();
+        newPhone.value = phoneElement.textContent;
+        // to remove in localStorage
+        var itemLis = li.textContent.split(':');
+        var email = itemLis[1].trim();
+        localStorage.removeItem(email);
+        itemList.removeChild(li);
+    }
+    
 }
