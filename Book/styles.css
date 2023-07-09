@@ -32,3 +32,6 @@ header{
 ul{
     list-style: circle;
 }
+.float-right{
+    float:right !important
+}
