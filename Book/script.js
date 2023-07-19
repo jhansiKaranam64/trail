@@ -16,7 +16,7 @@ function addItem(e){
     var newPhone = document.getElementById('Phone');
 
     if(newName.value===''||newEmail.value===''||newPhone.value===''){
-        console.log(newEmail);
+       
         msg.classList.add('error');
         msg.innerHTML='Please enter all fields';
 

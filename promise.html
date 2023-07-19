@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promise</title>
+</head>
+<body>
+    <h1>Promises</h1>
+    <script>
+        const posts=[{ title: 'Post 1' },{title: 'Post 2'},{ title: 'Post 3' }];
+        function createPost(post){
+            return new Promise((resolve,reject)=>{
+               setTimeout(()=>{
+                posts.push(post);
+                resolve();
+               },0);
+            });
+        }
+        function deletePost(){
+            return new Promise((resolve,reject)=>{
+                setTimeout(()=>{
+                    if(posts.length>0){
+                        const popped = posts.pop();
+                        resolve(popped);
+                    }else{
+                        reject("ERROR");
+                    }
+                    
+                },1000);
+            });
+        }
+        function updateLastUserActivityTime(){
+            return new Promise((resolve,reject)=>{
+                setTimeout(()=>{
+                    const currentTime = new Date().toLocaleTimeString();
+                    resolve(currentTime);
+                },1000);
+            });
+        }
+
+        updateLastUserActivityTime()
+        .then((lastActivityTime) => {
+            console.log('Before Creating Post:', lastActivityTime);
+            return createPost({ title: 'Post 4' });
+        })
+        .then(() => updateLastUserActivityTime())
+        .then((lastActivityTime) => {
+            console.log('Posts created:', posts);
+            console.log('After Creating Post:', lastActivityTime);
+            return deletePost();
+        })
+        .then((deletedPost) => {
+            console.log('Deleted Post:', deletedPost);
+            console.log('Updated Posts:', posts);
+        })
+        .catch((error) => {
+            console.log('Error:', error);
+        });
+    </script>
+</body>
+
+</html>
