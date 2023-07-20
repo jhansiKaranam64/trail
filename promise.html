@@ -9,7 +9,7 @@
     <h1>Promises</h1>
     <script>
         const posts=[{ title: 'Post 1' },{title: 'Post 2'},{ title: 'Post 3' }];
-        function createPost(post){
+        async function createPost(post){
             return new Promise((resolve,reject)=>{
                setTimeout(()=>{
                 posts.push(post);
@@ -17,7 +17,7 @@
                },0);
             });
         }
-        function deletePost(){
+        async function deletePost(){
             return new Promise((resolve,reject)=>{
                 setTimeout(()=>{
                     if(posts.length>0){
@@ -38,8 +38,29 @@
                 },1000);
             });
         }
+        async function main(){
+            try{
+               // updateLastUserActivityTime().then((lastActivityTime)=>{console.log('Before Creating Post:', lastActivityTime);})
+                await createPost({ title: 'Post 4'});
+                const lastActivityTime = await updateLastUserActivityTime();
+                console.log('Posts created:', posts);
+                console.log('Last Activity Time:', lastActivityTime);
 
-        updateLastUserActivityTime()
+                await createPost({ title: 'Post 5'});
+                const lastActivityTime1 = await updateLastUserActivityTime();
+                //console.log('Posts created:', posts);
+                console.log('Last Activity Time:', lastActivityTime1);
+
+                const deletedPost = await deletePost();
+                console.log('Deleted Post:', deletedPost);
+                console.log('Updated Posts', posts);
+
+            }catch (error) {
+                console.log('Error:', error);
+            }
+        }
+        main();
+       /* updateLastUserActivityTime()
         .then((lastActivityTime) => {
             console.log('Before Creating Post:', lastActivityTime);
             return createPost({ title: 'Post 4' });
@@ -56,7 +77,7 @@
         })
         .catch((error) => {
             console.log('Error:', error);
-        });
+        });*/
     </script>
 </body>
 
