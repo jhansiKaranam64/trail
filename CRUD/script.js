@@ -32,7 +32,7 @@ function addItem(e){
         }
         //userDetails.push(newUser);
         //localStorage.setItem(newEmail.value,JSON.stringify(newUser));
-        axios.post("https://crudcrud.com/api/c7d8ca552d1e4aab8a88a59f17180d17/details",newUser)
+        axios.post("https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details",newUser)
             .then(response => {
                 console.log(response);
                 showNewUserOnScreen(response.data)
@@ -75,7 +75,7 @@ function showNewUserOnScreen(obj){
 }
 // loading data with is already stored in server
 window.addEventListener("DOMContentLoaded",() => {
-    axios.get("https://crudcrud.com/api/c7d8ca552d1e4aab8a88a59f17180d17/details")
+    axios.get("https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details")
     .then(res=>{
         const data = res.data;
         data.forEach(item =>{
@@ -94,7 +94,7 @@ function removeItem(e){
             var li = e.target.parentElement;
             const id = li.dataset.id;
             console.log('User ID:', id);
-            axios.delete('https://crudcrud.com/api/c7d8ca552d1e4aab8a88a59f17180d17/details/${id}')
+            axios.delete(`https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details/${id}`)
             .then(res =>{
                 li.remove();
             })
@@ -122,11 +122,36 @@ function editItem(e){
         newName.value = nameElement.textContent.split(':')[0].trim();
         newEmail.value = emailElement.textContent.split(':')[0].trim();
         newPhone.value = phoneElement.textContent;
-        // to remove in localStorage
-        var itemLis = li.textContent.split(':');
-        var email = itemLis[1].trim();
-        localStorage.removeItem(email);
-        itemList.removeChild(li);
+        //form.removeEventListener('submit', handleSubmit);
+        form.addEventListener('submit', handleSubmit);
+
+        function handleSubmit(e){
+            e.preventDefault();
+            const updatedUser = {
+                name: newName.value,
+                email: newEmail.value,
+                phone: newPhone.value,
+            };
+            const userId = li.dataset.id;
+            axios
+            .put(`https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details/${userId}`, updatedUser)
+            .then((response) => {
+                console.log(response);
+                // Update the user details in the list item and clear the form fields
+                const li = itemList.querySelector(`li[data-id="${userId}"]`);
+                console.log(li);
+                li.firstChild.textContent = `${updatedUser.name}: `;
+                li.firstChild.nextSibling.textContent = `${updatedUser.email}: `;
+                li.firstChild.nextSibling.nextSibling.textContent = `${updatedUser.phone}`;
+    
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
+
+       
+        
     }
     
 }
