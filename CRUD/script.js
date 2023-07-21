@@ -51,7 +51,9 @@ function addItem(e){
 //display function
 function showNewUserOnScreen(obj){
     var li =document.createElement('li');
+    li.dataset.id = obj._id;
     li.className = "list-group-item";
+    
 
     var deleteBtn = document.createElement('button');
     deleteBtn.className ="btn btn-danger btn-sm float-right delete";
@@ -71,6 +73,7 @@ function showNewUserOnScreen(obj){
     itemList.appendChild(li);
     
 }
+// loading data with is already stored in server
 window.addEventListener("DOMContentLoaded",() => {
     axios.get("https://crudcrud.com/api/c7d8ca552d1e4aab8a88a59f17180d17/details")
     .then(res=>{
@@ -89,10 +92,15 @@ function removeItem(e){
     if(e.target.classList.contains('delete')){
         if(confirm('Are u sure?')){
             var li = e.target.parentElement;
-            var itemLis = li.textContent.split(':');
-            var email = itemLis[1].trim();
-            localStorage.removeItem(email);
-            itemList.removeChild(li);
+            const id = li.dataset.id;
+            console.log('User ID:', id);
+            axios.delete('https://crudcrud.com/api/c7d8ca552d1e4aab8a88a59f17180d17/details/${id}')
+            .then(res =>{
+                li.remove();
+            })
+            .catch(err=>{
+                console.log(err);
+            })
         }
     }
 }
