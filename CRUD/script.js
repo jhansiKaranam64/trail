@@ -4,8 +4,8 @@ const msg=document.querySelector('.msg');
 
 
 form.addEventListener('submit',addItem);
-itemList.addEventListener('click',removeItem);
-itemList.addEventListener('click',editItem);
+//itemList.addEventListener('click',deleteUser);
+//itemList.addEventListener('click',editItem);
 
 // Add details
 function addItem(e){
@@ -32,7 +32,7 @@ function addItem(e){
         }
         //userDetails.push(newUser);
         //localStorage.setItem(newEmail.value,JSON.stringify(newUser));
-        axios.post("https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details",newUser)
+        axios.post("https://crudcrud.com/api/98263ad935e04d3fb686c86f06057fe9/details",newUser)
             .then(response => {
                 console.log(response);
                 showNewUserOnScreen(response.data)
@@ -58,6 +58,7 @@ function showNewUserOnScreen(obj){
     var deleteBtn = document.createElement('button');
     deleteBtn.className ="btn btn-danger btn-sm float-right delete";
     deleteBtn.appendChild(document.createTextNode('Delete'));
+    deleteBtn.setAttribute('onclick',`deleteUser('${obj._id}')`);
 
     li.appendChild(document.createTextNode(obj.name+": "));
     li.appendChild(document.createTextNode(obj.email+": "));
@@ -66,16 +67,23 @@ function showNewUserOnScreen(obj){
     var editBtn = document.createElement('button');
     editBtn.classList = "btn btn-primary btn-sm float-right edit";
     editBtn.appendChild(document.createTextNode('Edit'));
+    editBtn.setAttribute('onclick',`editItem('${obj.email}','${obj.name}','${obj.phone}','${obj._id}')`);
 
         
     li.appendChild(deleteBtn);
     li.appendChild(editBtn); 
     itemList.appendChild(li);
-    
+
+    /*document.getElementById('email').value = '';
+    document.getElementById('name').value = '';
+    document.getElementById('Phone').value = '';
+    const parentNode = document.getElementById('items');
+    const childHTML =`<li id=${obj._id} >${obj.name} - ${obj.email} - ${obj.phone} <button onclick = deleteUser('${obj._id}')> Delete</button> </li>`
+    parentNode.innerHTML = parentNode.innerHTML+childHTML;*/
 }
 // loading data with is already stored in server
 window.addEventListener("DOMContentLoaded",() => {
-    axios.get("https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details")
+    axios.get("https://crudcrud.com/api/98263ad935e04d3fb686c86f06057fe9/details")
     .then(res=>{
         const data = res.data;
         data.forEach(item =>{
@@ -87,71 +95,81 @@ window.addEventListener("DOMContentLoaded",() => {
         console.log(err);
     })
 })
-// remove deatils from UI and localStorage
-function removeItem(e){
-    if(e.target.classList.contains('delete')){
-        if(confirm('Are u sure?')){
-            var li = e.target.parentElement;
-            const id = li.dataset.id;
-            console.log('User ID:', id);
-            axios.delete(`https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details/${id}`)
+
+// editItem function
+function editItem(emailId,name,phone,userId){
+    document.getElementById('email').value = emailId;
+    document.getElementById('name').value = name;
+    document.getElementById('Phone').value = phone;
+    deleteUser(userId);
+}
+/*function editItem(emailId, name, phone, userId) {
+    document.getElementById('email').value = emailId;
+    document.getElementById('name').value = name;
+    document.getElementById('Phone').value = phone;
+
+    // Add an event listener to the form's submit event to handle the update
+    form.removeEventListener('submit', addItem); // Remove the previous event listener
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        
+        const updatedUser = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('Phone').value,
+        };
+
+        axios.put(`https://crudcrud.com/api/98263ad935e04d3fb686c86f06057fe9/details/${userId}`, updatedUser)
+            .then(response => {
+                console.log(response);
+                // Update the user details on the screen
+                updateUserOnScreen(userId, updatedUser);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
+        // Clear the form fields
+        document.getElementById('email').value = '';
+        document.getElementById('name').value = '';
+        document.getElementById('Phone').value = '';
+
+        // Revert the event listener to the original addItem function
+        form.removeEventListener('submit', this);
+        form.addEventListener('submit', addItem);
+    });
+}*/
+function updateUserOnScreen(userId, updatedUser) {
+    const listItem = document.querySelector(`li[data-id="${userId}"]`);
+    if (listItem) {
+        listItem.innerHTML = `${updatedUser.name}: ${updatedUser.email}: ${updatedUser.phone}`;
+
+        // Also, update the event listener for the edit button
+        const editBtn 
+        = listItem.querySelector('.edit');
+        if (editBtn) {
+            editBtn.setAttribute('onclick', `editItem('${updatedUser.email}', '${updatedUser.name}', '${updatedUser.phone}', '${userId}')`);
+        } else {
+            console.log(`Edit button for user with ID ${userId} not found.`);
+        }
+    } else {
+        console.log(`User with ID ${userId} not found on the screen.`);
+    }
+}
+
+//delete user
+function deleteUser(userId){
+    axios.delete(`https://crudcrud.com/api/98263ad935e04d3fb686c86f06057fe9/details/${userId}`)
             .then(res =>{
-                li.remove();
+                removeUserFromScreen(userId);
             })
             .catch(err=>{
                 console.log(err);
             })
-        }
-    }
 }
-
-// editItem function
-function editItem(e){
-    e.preventDefault();
-    if(e.target.classList.contains('edit')){
-        var newName = document.getElementById('name');
-        var newEmail = document.getElementById('email');
-        var newPhone = document.getElementById('Phone');
-        
-        var li = e.target.parentElement;
-        // getting values
-        var nameElement = li.firstChild;
-        var emailElement = nameElement.nextSibling;
-        var phoneElement = emailElement.nextSibling;
-        // to get values in input placeholders
-        newName.value = nameElement.textContent.split(':')[0].trim();
-        newEmail.value = emailElement.textContent.split(':')[0].trim();
-        newPhone.value = phoneElement.textContent;
-        //form.removeEventListener('submit', handleSubmit);
-        form.addEventListener('submit', handleSubmit);
-
-        function handleSubmit(e){
-            e.preventDefault();
-            const updatedUser = {
-                name: newName.value,
-                email: newEmail.value,
-                phone: newPhone.value,
-            };
-            const userId = li.dataset.id;
-            axios
-            .put(`https://crudcrud.com/api/52f4be3e91fe428785bc85376ee8c253/details/${userId}`, updatedUser)
-            .then((response) => {
-                console.log(response);
-                // Update the user details in the list item and clear the form fields
-                const li = itemList.querySelector(`li[data-id="${userId}"]`);
-                console.log(li);
-                li.firstChild.textContent = `${updatedUser.name}: `;
-                li.firstChild.nextSibling.textContent = `${updatedUser.email}: `;
-                li.firstChild.nextSibling.nextSibling.textContent = `${updatedUser.phone}`;
-    
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        }
-
-       
-        
+function removeUserFromScreen(userId){
+    const listItem = document.querySelector(`li[data-id="${userId}"]`);
+    if (listItem) {
+        listItem.remove();
     }
-    
 }
